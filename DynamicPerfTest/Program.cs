@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -18,8 +17,11 @@ namespace DynamicPerfTest
             var start = DateTime.Now;
             Type genericType = typeof(DynaObj<string>).GetGenericTypeDefinition();
 
-            for (int i = 0; i < 5_000; i++)
+            const int loops = 5000;
+            for (int i = 0; i < loops; i++)
             {
+                Console.Title = $"Test running for {(DateTime.Now - start).TotalSeconds:F2}s: {i}/{loops}";
+
                 // Define generic types, so BindGetMember gets called every time
                 Type dynamicType = CompileResultType($"DummyType{i}");
                 Type dynaType = genericType.MakeGenericType(dynamicType);
